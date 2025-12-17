@@ -1,42 +1,26 @@
 <?php
-/**
- * OrgBoard Database Connection Configuration
- * Campus Organization Financial Management System
- * 
- * This file handles database connections and provides utility functions
- * for database operations throughout the application.
- */
-
-// Database configuration
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'orgboard_db');
 define('DB_USER', 'orgboard_user');
 define('DB_PASS', 'secure_password_2024');
 define('DB_CHARSET', 'utf8mb4');
 
-// Error reporting for development (disable in production)
+    
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-/**
- * Database Connection Class
- * Provides PDO-based database connection with error handling
- */
+
 class Database {
     private static $instance = null;
     private $connection;
     private $error;
     
-    /**
-     * Private constructor to prevent direct instantiation
-     */
+
     private function __construct() {
         $this->connect();
     }
     
-    /**
-     * Get singleton instance
-     */
+
     public static function getInstance() {
         if (self::$instance === null) {
             self::$instance = new self();
@@ -44,9 +28,7 @@ class Database {
         return self::$instance;
     }
     
-    /**
-     * Establish database connection
-     */
+
     private function connect() {
         try {
             $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
@@ -65,59 +47,38 @@ class Database {
         }
     }
     
-    /**
-     * Get database connection
-     */
+
     public function getConnection() {
         return $this->connection;
     }
     
-    /**
-     * Get last error
-     */
+
     public function getError() {
         return $this->error;
     }
     
-    /**
-     * Close connection
-     */
+
     public function close() {
         $this->connection = null;
     }
     
-    /**
-     * Begin transaction
-     */
+
     public function beginTransaction() {
         return $this->connection->beginTransaction();
     }
     
-    /**
-     * Commit transaction
-     */
+
     public function commit() {
         return $this->connection->commit();
     }
     
-    /**
-     * Rollback transaction
-     */
+
     public function rollback() {
         return $this->connection->rollback();
     }
 }
 
-/**
- * User Management Functions
- */
 
-/**
- * Authenticate user login
- * @param string $email User email
- * @param string $password User password
- * @return array|false User data or false on failure
- */
 function authenticateUser($email, $password) {
     try {
         $db = Database::getInstance();
@@ -140,11 +101,7 @@ function authenticateUser($email, $password) {
     }
 }
 
-/**
- * Create new user account
- * @param array $userData User registration data
- * @return int|false New user ID or false on failure
- */
+
 function createUser($userData) {
     try {
         $db = Database::getInstance();
@@ -167,11 +124,7 @@ function createUser($userData) {
     }
 }
 
-/**
- * Get user by ID
- * @param int $userId User ID
- * @return array|false User data or false on failure
- */
+
 function getUserById($userId) {
     try {
         $db = Database::getInstance();
@@ -186,12 +139,7 @@ function getUserById($userId) {
     }
 }
 
-/**
- * Update user avatar
- * @param int $userId User ID
- * @param string $avatarPath Avatar file path
- * @return bool Success status
- */
+
 function updateUserAvatar($userId, $avatarPath) {
     try {
         $db = Database::getInstance();
@@ -205,16 +153,7 @@ function updateUserAvatar($userId, $avatarPath) {
     }
 }
 
-/**
- * Event Management Functions
- */
 
-/**
- * Get events for user based on their organizations
- * @param int $userId User ID
- * @param string $status Optional status filter
- * @return array Events data
- */
 function getUserEvents($userId, $status = null) {
     try {
         $db = Database::getInstance();
@@ -243,11 +182,7 @@ function getUserEvents($userId, $status = null) {
     }
 }
 
-/**
- * Create new event
- * @param array $eventData Event data
- * @return int|false New event ID or false on failure
- */
+
 function createEvent($eventData) {
     try {
         $db = Database::getInstance();
@@ -273,16 +208,7 @@ function createEvent($eventData) {
     }
 }
 
-/**
- * Financial Report Functions
- */
 
-/**
- * Get financial reports for user organizations
- * @param int $userId User ID
- * @param string $status Optional status filter
- * @return array Financial reports data
- */
 function getUserFinancialReports($userId, $status = null) {
     try {
         $db = Database::getInstance();
@@ -312,11 +238,7 @@ function getUserFinancialReports($userId, $status = null) {
     }
 }
 
-/**
- * Create financial report
- * @param array $reportData Report data
- * @return int|false New report ID or false on failure
- */
+
 function createFinancialReport($reportData) {
     try {
         $db = Database::getInstance();
@@ -343,16 +265,7 @@ function createFinancialReport($reportData) {
     }
 }
 
-/**
- * Announcement Functions
- */
 
-/**
- * Get announcements for user organizations
- * @param int $userId User ID
- * @param bool $activeOnly Get only active announcements
- * @return array Announcements data
- */
 function getUserAnnouncements($userId, $activeOnly = true) {
     try {
         $db = Database::getInstance();
@@ -381,11 +294,7 @@ function getUserAnnouncements($userId, $activeOnly = true) {
     }
 }
 
-/**
- * Create announcement
- * @param array $announcementData Announcement data
- * @return int|false New announcement ID or false on failure
- */
+
 function createAnnouncement($announcementData) {
     try {
         $db = Database::getInstance();
@@ -408,17 +317,7 @@ function createAnnouncement($announcementData) {
     }
 }
 
-/**
- * Notification Functions
- */
 
-/**
- * Get user notifications
- * @param int $userId User ID
- * @param bool $unreadOnly Get only unread notifications
- * @param int $limit Limit number of results
- * @return array Notifications data
- */
 function getUserNotifications($userId, $unreadOnly = false, $limit = 50) {
     try {
         $db = Database::getInstance();
@@ -443,12 +342,7 @@ function getUserNotifications($userId, $unreadOnly = false, $limit = 50) {
     }
 }
 
-/**
- * Mark notification as read
- * @param int $notificationId Notification ID
- * @param int $userId User ID (for security)
- * @return bool Success status
- */
+
 function markNotificationRead($notificationId, $userId) {
     try {
         $db = Database::getInstance();
@@ -462,11 +356,7 @@ function markNotificationRead($notificationId, $userId) {
     }
 }
 
-/**
- * Create notification
- * @param array $notificationData Notification data
- * @return int|false New notification ID or false on failure
- */
+
 function createNotification($notificationData) {
     try {
         $db = Database::getInstance();
@@ -488,15 +378,7 @@ function createNotification($notificationData) {
     }
 }
 
-/**
- * Utility Functions
- */
 
-/**
- * Get user organizations
- * @param int $userId User ID
- * @return array Organizations data
- */
 function getUserOrganizations($userId) {
     try {
         $db = Database::getInstance();
@@ -511,11 +393,7 @@ function getUserOrganizations($userId) {
     }
 }
 
-/**
- * Get dashboard statistics for user
- * @param int $userId User ID
- * @return array Dashboard statistics
- */
+
 function getDashboardStats($userId) {
     try {
         $db = Database::getInstance();
@@ -552,19 +430,6 @@ function getDashboardStats($userId) {
         return [];
     }
 }
-
-/**
- * Session Management
- */
-
-/**
- * Create user session
- * @param int $userId User ID
- * @param string $sessionId Session ID
- * @param string $ipAddress User IP address
- * @param string $userAgent User agent string
- * @return bool Success status
- */
 function createUserSession($userId, $sessionId, $ipAddress, $userAgent) {
     try {
         $db = Database::getInstance();
@@ -580,11 +445,6 @@ function createUserSession($userId, $sessionId, $ipAddress, $userAgent) {
     }
 }
 
-/**
- * Validate session
- * @param string $sessionId Session ID
- * @return array|false User data or false on failure
- */
 function validateSession($sessionId) {
     try {
         $db = Database::getInstance();
@@ -611,11 +471,7 @@ function validateSession($sessionId) {
     }
 }
 
-/**
- * Destroy session
- * @param string $sessionId Session ID
- * @return bool Success status
- */
+
 function destroySession($sessionId) {
     try {
         $db = Database::getInstance();
@@ -629,10 +485,7 @@ function destroySession($sessionId) {
     }
 }
 
-/**
- * Clean up expired sessions
- * Should be called periodically (e.g., daily cron job)
- */
+
 function cleanupExpiredSessions() {
     try {
         $db = Database::getInstance();
